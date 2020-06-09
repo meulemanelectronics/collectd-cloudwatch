@@ -833,6 +833,10 @@ def main():
         '-b', '--github_repo_branch', required=False, default="master",
         help='Overrides a branch of source repository'
     )
+    parser.add_argument(
+        '-w', '--without_restarting', default=False,
+        action='store_true', help='Excludes collectd restarting from setup process'
+    )
     args = parser.parse_args()
 
     if args.proxy_port is None and args.proxy_name or args.proxy_port and args.proxy_name is None:
@@ -864,6 +868,7 @@ def main():
     dimension_value = args.dimension_value
     debug_setup = args.debug_setup
     debug = args.debug
+    without_restarting = args.without_restarting
 
     def set_github_repository(github_username, github_repo_branch):
         GITHUB_USER_NAME = github_username
@@ -909,7 +914,8 @@ def main():
             _run_command(UNTAR_PLUGIN_CMD, exit_on_failure=True)
             _run_command(COPY_PLUGIN_CMD, shell=True, exit_on_failure=True)
             supply_config()
-            restart_collectd()
+            if not without_restarting:
+                restart_collectd()
         finally:
             remove_temp_dir()
 
