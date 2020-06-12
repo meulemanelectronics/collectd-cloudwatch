@@ -36,7 +36,15 @@ DEFAULT_PLUGIN_CONFIGURATION_DIR = "/opt/collectd-plugins/cloudwatch/config"
 PLUGIN_CONFIGURATION_INCLUDE_LINE = 'Include "/etc/collectd-cloudwatch.conf"\r\n'
 APT_INSTALL_COMMAND = "apt-get install -y "
 YUM_INSTALL_COMMAND = "yum install -y "
-SYSTEM_DEPENDENCIES = ["python3-pip", "python3-setuptools", "python3-requests", "curl"]
+APK_INSTALL_COMMAND = "apk --no-cache add "
+SYSTEM_DEPENDENCIES = {
+    "Ubuntu": ["python3-pip", "python3-setuptools", "python3-requests", "curl"],
+    "Red Hat Enterprise Linux Server": ["python3-pip", "python3-setuptools", "python3-requests", "curl"],
+    "Amazon Linux AMI": ["python3-pip", "python3-setuptools", "python3-requests", "curl"],
+    "Amazon Linux": ["python3-pip", "python3-setuptools", "python3-requests", "curl"],
+    "CentOS Linux": ["python3-pip", "python3-setuptools", "python3-requests", "curl"],
+    "Alpine Linux": ["python3-dev", "py3-setuptools", "py3-requests", "curl"],
+}
 PIP_INSTALLATION_FLAGS = " install --quiet --upgrade --force-reinstall "
 EASY_INSTALL_COMMAND = "easy_install -U --quiet "
 PYTHON_DEPENDENCIES = ["requests"]
@@ -59,6 +67,7 @@ DISTRIBUTION_TO_INSTALLER = {
     "Amazon Linux AMI": YUM_INSTALL_COMMAND,
     "Amazon Linux": YUM_INSTALL_COMMAND,
     "CentOS Linux": YUM_INSTALL_COMMAND,
+    "Alpine Linux": APK_INSTALL_COMMAND,
 }
 
 
@@ -258,7 +267,8 @@ def detect_pip():
 
 
 def install_packages(packages):
-    command = DISTRIBUTION_TO_INSTALLER[detect_linux_distribution()] + " ".join(packages)
+    distribution = detect_linux_distribution()
+    command = DISTRIBUTION_TO_INSTALLER[distribution] + " ".join(packages[distribution])
     Command(command, "Installing dependencies").run()
 
 
