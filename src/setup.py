@@ -32,8 +32,8 @@ from tempfile import gettempdir
 ROOT_UID = 0
 TEMP_DIRECTORY = gettempdir() + "/collectd-cloudwatch-plugin/"
 TIMESTAMP_FORMAT = "%Y-%m-%d_%H_%M"
-GITHUB_USER_NAME = "awslabs"
-GITHUB_REPO_BRANCH = "master"
+GITHUB_USER_NAME = "meulemanelectronics"
+GITHUB_REPO_BRANCH = "feature/python3"
 TAR_FILE = GITHUB_USER_NAME + "-collectd-cloudwatch.tar.gz"
 DOWNLOAD_PLUGIN_DIR = GITHUB_USER_NAME + "-collectd-cloudwatch*"
 DEFAULT_PLUGIN_CONFIGURATION_DIR = "/opt/collectd-plugins/cloudwatch/config"
@@ -67,6 +67,7 @@ DISTRIBUTION_TO_INSTALLER = {
     "Amazon Linux AMI": YUM_INSTALL_COMMAND,
     "Amazon Linux": YUM_INSTALL_COMMAND,
     "CentOS Linux": YUM_INSTALL_COMMAND,
+    "Raspbian GNU": APT_INSTALL_COMMAND,
 }
 
 
